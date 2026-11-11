@@ -93,7 +93,7 @@ app.post('/api/drive/upload', uploadProcessor.single('cloudFile'), (req, res) =>
     fileId: Date.now().toString(),
     originalName: req.file.originalname,
     formattedSize: (req.file.size / (1024 * 1024)).toFixed(2) + " MB",
-    downloadUrl: `http://localhost:5000/uploads/${req.file.filename}`,
+    downloadUrl: `/uploads/${req.file.filename}`,
     creationDate: new Date().toLocaleDateString()
   };
 
@@ -113,4 +113,12 @@ app.delete('/api/drive/files/:id', (req, res) => {
   res.status(404).json({ error: "Target catalog file context pointer match missing." });
 });
 
-app.listen(5000, () => console.log('🚀 Local cloud server execution baseline active on port 5000'));
+/* --- SERVE REACT FRONTEND IN PRODUCTION --- */
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+app.get('/{*splat}', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Cloud server active on port ${PORT}`));
