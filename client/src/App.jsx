@@ -93,7 +93,7 @@ function App() {
         <div className="auth-card-wrapper">
           <div className="app-branding">☁️ Personal CloudBox</div>
           <h3>Welcome Back</h3>
-          <p className="subtitle-caption">Input space access credentials to verify drive data maps</p>
+          <p className="subtitle-caption">Input space access credentials to verify drive data </p>
           {statusMessage.text && <div className={`status-notification ${statusMessage.type}`}>{statusMessage.text}</div>}
           <form onSubmit={processAuthenticationValidation} className="operational-form">
             <div className="field-group">
@@ -104,7 +104,7 @@ function App() {
               <label>Password Context Key</label>
               <input type="password" required placeholder="••••••••" value={authForm.password} onChange={e => setAuthForm({...authForm, password: e.target.value})} />
             </div>
-            <button type="submit" className="primary-action-trigger">Access Workspace Platform Drive</button>
+            <button type="submit" className="primary-action-trigger">Log in</button>
           </form>
           <div className="routing-toggle-footer">
             Don't have a storage container? <span onClick={() => { setActiveView('SIGNUP_VIEW'); resetStatus(); }}>Instantiate identity framework here</span>
@@ -120,7 +120,7 @@ function App() {
         <div className="auth-card-wrapper">
           <div className="app-branding">☁️ Personal CloudBox</div>
           <h3>Initialize System Account</h3>
-          <p className="subtitle-caption">Setup a clean local sandbox cluster space</p>
+          <p className="subtitle-caption">Setup your account</p>
           {statusMessage.text && <div className={`status-notification ${statusMessage.type}`}>{statusMessage.text}</div>}
           <form onSubmit={processProfileInstantiation} className="operational-form">
             <div className="field-group">
@@ -135,7 +135,7 @@ function App() {
               <label>Secure Entry Password Code</label>
               <input type="password" required placeholder="Password" value={authForm.password} onChange={e => setAuthForm({...authForm, password: e.target.value})} />
             </div>
-            <button type="submit" className="primary-action-trigger-green">Register Master Account</button>
+            <button type="submit" className="primary-action-trigger-green">Register your Account</button>
           </form>
           <div className="routing-toggle-footer">
             Have an account? <span onClick={() => { setActiveView('LOGIN_VIEW'); resetStatus(); }}>Return back to logging portal</span>
