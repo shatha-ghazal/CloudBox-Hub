@@ -93,7 +93,7 @@ function App() {
         <div className="auth-card-wrapper">
           <div className="app-branding">☁️ Personal CloudBox</div>
           <h3>Welcome Back</h3>
-          <p className="subtitle-caption">Input space access credentials to verify drive data </p>
+          <p className="subtitle-caption">Input your credentials  </p>
           {statusMessage.text && <div className={`status-notification ${statusMessage.type}`}>{statusMessage.text}</div>}
           <form onSubmit={processAuthenticationValidation} className="operational-form">
             <div className="field-group">
@@ -107,7 +107,7 @@ function App() {
             <button type="submit" className="primary-action-trigger">Log in</button>
           </form>
           <div className="routing-toggle-footer">
-            Don't have a storage container? <span onClick={() => { setActiveView('SIGNUP_VIEW'); resetStatus(); }}>Instantiate identity framework here</span>
+            Don't have a storage container? <span onClick={() => { setActiveView('SIGNUP_VIEW'); resetStatus(); }}>Register Here</span>
           </div>
         </div>
       </div>
