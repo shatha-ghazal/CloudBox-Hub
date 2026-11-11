@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { createRoot } from 'react-dom/client'; // Added the mounting tool
+import { createRoot } from 'react-dom/client';
 import './App.css';
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
 
   useEffect(() => {
     if (sessionUser) {
-      fetch('http://localhost:5000/api/drive/files', {
+      fetch('/api/drive/files', {
         headers: { 'x-user-identity': sessionUser.id }
       })
       .then(res => res.json())
@@ -26,7 +26,7 @@ function App() {
     e.preventDefault();
     resetStatus();
     try {
-      const res = await fetch('http://localhost:5000/api/auth/signup', {
+      const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(authForm)
@@ -45,7 +45,7 @@ function App() {
     e.preventDefault();
     resetStatus();
     try {
-      const res = await fetch('http://localhost:5000/api/auth/login', {
+      const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: authForm.email, password: authForm.password })
@@ -67,7 +67,7 @@ function App() {
     dataContainer.append('cloudFile', targetFile);
 
     try {
-      const res = await fetch('http://localhost:5000/api/drive/upload', {
+      const res = await fetch('/api/drive/upload', {
         method: 'POST',
         headers: { 'x-user-identity': sessionUser.id },
         body: dataContainer
@@ -80,7 +80,7 @@ function App() {
   };
 
   const executeStorageObjectPurge = async (targetId) => {
-    await fetch(`http://localhost:5000/api/drive/files/${targetId}`, {
+    await fetch(`/api/drive/files/${targetId}`, {
       method: 'DELETE',
       headers: { 'x-user-identity': sessionUser.id }
     });
@@ -183,18 +183,34 @@ function App() {
         <div className="workspace-view-content-canvas">
           {driveFiles.length === 0 ? (
             <div className="empty-catalog-fallback-card">
-              <h4>No files inside directory</h4>
-              <p>Upload documents above.</p>
+              <div className="fallback-art-icon">📁</div>
+              <h4>No files inside your storage space</h4>
+              <p>Click "Upload File" above to add your first document or media asset.</p>
             </div>
           ) : (
-            <div className="storage-catalog-cards-grid">
-              {driveFiles.map(item => (
-                <div key={item.fileId} className="storage-file-card-item">
-                  <h4>📄 {item.originalName}</h4>
-                  <p><small>{item.creationDate} - {item.formattedSize}</small></p>
-                  <div style={{display:'flex', gap:'10px', marginTop:'10px'}}>
-                    <a href={item.downloadUrl} download target="_blank" rel="noreferrer" style={{color:'#2563eb', fontSize:'13px', textDecoration:'none', fontWeight:'bold'}}>⬇️ Get</a>
-                    <button onClick={() => executeStorageObjectPurge(item.fileId)} style={{color:'#ef4444', border:'none', background:'none', cursor:'pointer', fontSize:'13px', fontWeight:'bold'}}>🗑️ Clear</button>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '16px' }}>
+              {driveFiles.map((file) => (
+                <div key={file.fileId} style={{ background: '#fff', padding: '16px', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ fontWeight: '600', marginBottom: '6px', wordBreak: 'break-all' }}>📄 {file.originalName}</div>
+                  <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '12px' }}>
+                    {file.formattedSize} • {file.creationDate}
+                  </div>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <a
+                      href={file.downloadUrl}
+                      download={file.originalName}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ flex: 1, textAlign: 'center', padding: '6px', background: '#2563eb', color: '#fff', borderRadius: '6px', textDecoration: 'none', fontSize: '12px', fontWeight: '600' }}
+                    >
+                      Download
+                    </a>
+                    <button
+                      onClick={() => executeStorageObjectPurge(file.fileId)}
+                      style={{ padding: '6px 10px', background: '#fef2f2', color: '#ef4444', border: '1px solid #fee2e2', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' }}
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               ))}
@@ -206,8 +222,9 @@ function App() {
   );
 }
 
-// --- MASTER MOUNTING ACTIVATION LINK ---
-// This hooks the React engine directly into the id="root" inside your index.html file!
-const container = document.getElementById('root');
-const root = createRoot(container);
-root.render(<App />);
+const rootElement = document.getElementById('root');
+if (rootElement) {
+  createRoot(rootElement).render(<App />);
+}
+
+export default App;
