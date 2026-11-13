@@ -1,0 +1,19 @@
+
+# Dependencies
+client/node_modules/
+server/node_modules/
+
+# Frontend production build
+client/dist/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db
