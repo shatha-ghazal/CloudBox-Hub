@@ -48,3 +48,17 @@ jobs:
       - name: Check backend syntax
         working-directory: ./server
         run: node --check server.js
+
+  deploy:
+    name: Deploy to Render
+    needs:
+      - frontend-build
+      - backend-check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Render deployment
+        run: curl -fsS -X POST "$RENDER_DEPLOY_HOOK"
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
